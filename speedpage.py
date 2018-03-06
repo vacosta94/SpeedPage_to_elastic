@@ -15,7 +15,8 @@ es_indexprefix=cfg.get('speedpage', 'es_indexprefix')
 if cfg.get('speedpage', 'elastic_auth'):
  es_user=cfg.get('speedpage', 'es_user')
  es_password=cfg.get('speedpage', 'es_password')
- es=Elasticsearch([{'host': es_host, 'port': es_port, 'user': es_user, 'password': es_password}])
+ #es=Elasticsearch([{'host': es_host, 'port': es_port, 'user': es_user, 'password': es_password}])
+ es=Elasticsearch(host=es_host, port=es_port, http_auth=(es_user,es_password))
 else:
  es=Elasticsearch([{'host': es_host, 'port': es_port}])
 

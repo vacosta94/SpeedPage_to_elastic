@@ -8,7 +8,8 @@ import json
 from datetime import datetime
 from elasticsearch import Elasticsearch 
 cfg = ConfigParser.ConfigParser()
-cfg.readfp(open('parameters.conf'))
+cfgfile=vmname=sys.argv[1]
+cfg.readfp(open(cfgfile))
 es_host=cfg.get('speedpage', 'es_host')
 es_port=cfg.get('speedpage', 'es_port')
 es_indexprefix=cfg.get('speedpage', 'es_indexprefix')
@@ -20,7 +21,8 @@ if cfg.get('speedpage', 'elastic_auth'):
 else:
  es=Elasticsearch([{'host': es_host, 'port': es_port}])
 
-domain=vmname=sys.argv[1]
+
+domain=vmname=sys.argv[2]
 now=datetime.utcnow()
 es_index=es_indexprefix + "-" + datetime.now().strftime('%Y.%m.%d')
 
@@ -28,9 +30,7 @@ def insert_elastic(data):
   es.index(index=es_index, doc_type='speed',body=data) 
 def parse_result(result):
   doc = {'@timestamp': now }
-  #print result
   result = json.loads(result)
-  #print dir(jsonresult)
   domainname=result["overview"]["URL"] 
   speed=result["overview"]["Speed"] 
   strategy=result["overview"]["Strategy"] 
